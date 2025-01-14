@@ -6,6 +6,8 @@ public class ShipScript : MonoBehaviour
     private Rigidbody2D rb;
     public GameObject laser;
     public int score;
+    public float fireDelay = 0.25f;
+    float cooldownTimer = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,10 +28,13 @@ public class ShipScript : MonoBehaviour
         // Assign the new velocity to the Rigidbody2D
         rb.linearVelocity = newVelocity;
 
+        cooldownTimer -= Time.deltaTime;
+
         //Press shoot (space or left click)
-        if(Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        if((Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0)) && cooldownTimer <= 0)
         {
             //Creates a new instance(clone) of the laser
+            cooldownTimer = fireDelay;
             Instantiate(laser, transform.position, Quaternion.identity);
         }
     }

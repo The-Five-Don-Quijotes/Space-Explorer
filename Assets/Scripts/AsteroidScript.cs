@@ -25,4 +25,14 @@ public class AsteroidScript : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Laser"))
+        {
+            Destroy(collision.gameObject);
+
+            Destroy(gameObject);
+        }
+    }
 }
