@@ -10,6 +10,9 @@ public class ShipScript : MonoBehaviour
     float cooldownTimer = 0;
     private float halfPlayerSizeX;
     private float halfPlayerSizeY;
+    private Vector3 respawnPosition;
+    public GameManager gameManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,6 +20,10 @@ public class ShipScript : MonoBehaviour
         score = 0;
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
+        if (gameManager == null)
+        {
+            gameManager = FindAnyObjectByType<GameManager>(); 
+        }
     }
 
     // Update is called once per frame
@@ -44,6 +51,7 @@ public class ShipScript : MonoBehaviour
         }
     }
 
+    //prevent ship go outside of screen boundaries
     void clampPlayerMovement()
     {
         Vector3 position = transform.position;
@@ -56,11 +64,22 @@ public class ShipScript : MonoBehaviour
 
         float bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance)).y + halfPlayerSizeY;
         float topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, distance)).y - halfPlayerSizeY;
-
         position.x = Mathf.Clamp(position.x, leftBorder, rightBorder);
         position.y = Mathf.Clamp(position.y, bottomBorder, topBorder);
 
         transform.position = position;
+    }
+
+    //collision and respawn trigger
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Asteriod"))
+        {
+            Debug.Log("Ship hit by a asteriod!");
+            respawnPosition = transform.position;
+            gameManager.SpawnShip(respawnPosition);
+            Destroy(gameObject);
+        }
     }
 
 }
