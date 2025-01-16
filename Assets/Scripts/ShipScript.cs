@@ -11,7 +11,6 @@ public class ShipScript : MonoBehaviour
     private float halfPlayerSizeX;
     private float halfPlayerSizeY;
     private Vector3 respawnPosition;
-    public GameManager gameManager;
     public GameObject shipPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
