@@ -12,6 +12,7 @@ public class ShipScript : MonoBehaviour
     private float halfPlayerSizeY;
     private Vector3 respawnPosition;
     public GameManager gameManager;
+    public GameObject shipPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -77,8 +78,10 @@ public class ShipScript : MonoBehaviour
         {
             Debug.Log("Ship hit by a asteriod!");
             respawnPosition = transform.position;
-            gameManager.SpawnShip(respawnPosition);
-            Destroy(gameObject);
+            //gameManager.SpawnShip(respawnPosition);
+             Instantiate(shipPrefab, respawnPosition, Quaternion.identity);
+             Debug.Log("Ship respawned at position: " + respawnPosition);
+             Destroy(gameObject);
         }
     }
 
