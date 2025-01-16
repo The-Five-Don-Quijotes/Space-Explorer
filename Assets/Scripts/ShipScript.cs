@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,7 +12,8 @@ public class ShipScript : MonoBehaviour
     private float halfPlayerSizeX;
     private float halfPlayerSizeY;
     private Vector3 respawnPosition;
-    public GameObject shipPrefab;
+    public GameObject instantiatedshipPrefab;
+    [SerializeField] private GameObject shipPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,10 +22,6 @@ public class ShipScript : MonoBehaviour
         score = 0;
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
-        if (gameManager == null)
-        {
-            gameManager = FindAnyObjectByType<GameManager>(); 
-        }
     }
 
     // Update is called once per frame
@@ -43,7 +41,7 @@ public class ShipScript : MonoBehaviour
         cooldownTimer -= Time.deltaTime;
 
         //Press shoot (space or left click)
-        if((Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0)) && cooldownTimer <= 0)
+        if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0)) && cooldownTimer <= 0)
         {
             //Creates a new instance(clone) of the laser
             cooldownTimer = fireDelay;
@@ -75,12 +73,56 @@ public class ShipScript : MonoBehaviour
     {
         if (collision.CompareTag("Asteriod"))
         {
-            Debug.Log("Ship hit by a asteriod!");
+            Debug.Log("Ship hit by an asteroid!");
             respawnPosition = transform.position;
-            //gameManager.SpawnShip(respawnPosition);
-             Instantiate(shipPrefab, respawnPosition, Quaternion.identity);
-             Debug.Log("Ship respawned at position: " + respawnPosition);
-             Destroy(gameObject);
+            gameObject.SetActive(false);
+            Invoke("Respawn", 1f);
+        }
+    }
+
+    private void Respawn()
+    {
+        // Reactivate the ship
+        gameObject.SetActive(true);
+
+        // Make the ship invulnerable
+        StartCoroutine(TemporaryInvulnerability(3f));
+    }
+
+    private IEnumerator TemporaryInvulnerability(float duration)
+    {
+        Collider2D shipCollider = GetComponent<Collider2D>();
+        SpriteRenderer shipRenderer = GetComponent<SpriteRenderer>();
+        float blinkInterval = 0.2f;
+
+        if (shipCollider != null)
+        {
+            shipCollider.enabled = false; // Disable the collider
+            Debug.Log("Ship is invulnerable.");
+        }
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            if (shipRenderer != null)
+            {
+                shipRenderer.enabled = !shipRenderer.enabled;
+            }
+
+            elapsedTime += blinkInterval;
+            yield return new WaitForSeconds(blinkInterval); // blink delay
+        }
+
+        if (shipRenderer != null)
+        {
+            shipRenderer.enabled = true; 
+        }
+
+        if (shipCollider != null)
+        {
+            shipCollider.enabled = true; // Re-enable the collider
+            Debug.Log("Ship is now vulnerable.");
         }
     }
 
