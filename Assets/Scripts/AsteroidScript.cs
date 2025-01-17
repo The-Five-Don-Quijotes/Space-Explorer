@@ -30,6 +30,7 @@ public class AsteroidScript : MonoBehaviour
     {
         if (collision.CompareTag("Laser"))
         {
+            ScoreScript.scoreValue += 10;
             Destroy(collision.gameObject);
 
             Destroy(gameObject);

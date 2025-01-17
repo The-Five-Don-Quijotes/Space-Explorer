@@ -71,12 +71,18 @@ public class ShipScript : MonoBehaviour
     //collision and respawn trigger
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Star"))
+        {
+            ScoreScript.scoreValue += 20;
+            Destroy(collision.gameObject);
+        }
         if (collision.CompareTag("Asteriod"))
         {
             Debug.Log("Ship hit by an asteroid!");
+            ScoreScript.scoreValue -= 10;
             respawnPosition = transform.position;
             gameObject.SetActive(false);
-            Invoke("Respawn", 1f);
+            Invoke("Respawn", 0.5f);
         }
     }
 

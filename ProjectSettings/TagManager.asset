@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Laser
   - Asteriod
+  - Star
   layers:
   - Default
   - TransparentFX
