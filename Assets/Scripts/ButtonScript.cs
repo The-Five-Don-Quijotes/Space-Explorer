@@ -14,4 +14,9 @@ public class ButtonScript : MonoBehaviour
         Debug.Log("Instruction");
         SceneManager.LoadScene("Instruction Scene");
     }
+
+    public void MenuScene()
+    {
+        SceneManager.LoadScene("Menu Scene");
+    }
 }
