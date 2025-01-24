@@ -19,4 +19,9 @@ public class ButtonScript : MonoBehaviour
     {
         SceneManager.LoadScene("Menu Scene");
     }
+
+    public void TotalScore()
+    {
+        SceneManager.LoadScene("TotalSCore Scene");
+    }
 }

@@ -1,12 +1,14 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ShipScript : MonoBehaviour
 {
     private Rigidbody2D rb;
     public GameObject laser;
     public int score;
+    public int lives = 3; // Initialize lives to 3
     public float fireDelay = 0.25f;
     float cooldownTimer = 0;
     private float halfPlayerSizeX;
@@ -15,11 +17,16 @@ public class ShipScript : MonoBehaviour
     public GameObject instantiatedshipPrefab;
     [SerializeField] private GameObject shipPrefab;
 
+    public GameObject explosionEffect; // Optional: Explosion effect prefab
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        lives = 3;
         score = 0;
+        ScoreScript.scoreValue = 0;
+        LifeScript.lifeValue = 3;
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
     }
@@ -40,16 +47,16 @@ public class ShipScript : MonoBehaviour
 
         cooldownTimer -= Time.deltaTime;
 
-        //Press shoot (space or left click)
+        // Press shoot (space or left click)
         if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0)) && cooldownTimer <= 0)
         {
-            //Creates a new instance(clone) of the laser
+            // Creates a new instance (clone) of the laser
             cooldownTimer = fireDelay;
             Instantiate(laser, transform.position, Quaternion.identity);
         }
     }
 
-    //prevent ship go outside of screen boundaries
+    // Prevent ship from going outside of screen boundaries
     void clampPlayerMovement()
     {
         Vector3 position = transform.position;
@@ -59,16 +66,16 @@ public class ShipScript : MonoBehaviour
         float leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance)).x + halfPlayerSizeX;
         float rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance)).x - halfPlayerSizeX;
 
-
         float bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance)).y + halfPlayerSizeY;
         float topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, distance)).y - halfPlayerSizeY;
+
         position.x = Mathf.Clamp(position.x, leftBorder, rightBorder);
         position.y = Mathf.Clamp(position.y, bottomBorder, topBorder);
 
         transform.position = position;
     }
 
-    //collision and respawn trigger
+    // Collision and life decrement logic
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Star"))
@@ -76,23 +83,63 @@ public class ShipScript : MonoBehaviour
             ScoreScript.scoreValue += 20;
             Destroy(collision.gameObject);
         }
-        if (collision.CompareTag("Asteriod"))
+        else if (collision.CompareTag("Asteriod"))
         {
-            Debug.Log("Ship hit by an asteroid!");
+            Debug.Log("Ship hit by an asteriod!");
             ScoreScript.scoreValue -= 10;
+
+            LoseLife(); // Decrement life
+
+            // Optional: Destroy asteroid
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private void LoseLife()
+    {
+        lives--; // Decrement lives for ShipScript logic
+        LifeScript.DecreaseLife(); // Update the Life UI display
+        Debug.Log("Lives remaining: " + lives);
+
+        if (explosionEffect != null)
+        {
+            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        }
+
+        if (lives > 0)
+        {
             respawnPosition = transform.position;
             gameObject.SetActive(false);
             Invoke("Respawn", 0.5f);
         }
+        else
+        {
+            GameOver();
+        }
     }
+
 
     private void Respawn()
     {
         // Reactivate the ship
         gameObject.SetActive(true);
 
-        // Make the ship invulnerable
+        // Make the ship temporarily invulnerable
         StartCoroutine(TemporaryInvulnerability(3f));
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over! Lives depleted.");
+        SceneManager.LoadScene("Finish Scene");
+        
+
+    }
+
+    private IEnumerator DelayedSceneLoad()
+    {
+        yield return new WaitForSeconds(1.0f); // Adjust delay as needed
+        SceneManager.LoadScene("FinishScene");
     }
 
     private IEnumerator TemporaryInvulnerability(float duration)
@@ -122,7 +169,7 @@ public class ShipScript : MonoBehaviour
 
         if (shipRenderer != null)
         {
-            shipRenderer.enabled = true; 
+            shipRenderer.enabled = true;
         }
 
         if (shipCollider != null)
@@ -131,5 +178,4 @@ public class ShipScript : MonoBehaviour
             Debug.Log("Ship is now vulnerable.");
         }
     }
-
 }
