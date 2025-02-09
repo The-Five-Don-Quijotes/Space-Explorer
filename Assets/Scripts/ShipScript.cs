@@ -87,7 +87,14 @@ public class ShipScript : MonoBehaviour
         else if (collision.CompareTag("Asteriod"))
         {
             Debug.Log("Ship hit by an asteriod!");
-            ScoreScript.scoreValue -= 10;
+            if (ScoreScript.scoreValue == 0)
+            {
+                ScoreScript.scoreValue = 0;
+            }
+            else
+            {
+                ScoreScript.scoreValue -= 10;
+            }
 
             LoseLife(); // Decrement life
 
