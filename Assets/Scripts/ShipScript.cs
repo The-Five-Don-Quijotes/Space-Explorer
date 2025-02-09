@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,7 +8,6 @@ public class ShipScript : MonoBehaviour
 {
     private Rigidbody2D rb;
     public GameObject laser;
-    public int score;
     public int lives = 3; // Initialize lives to 3
     public float fireDelay = 0.25f;
     float cooldownTimer = 0;
@@ -15,6 +15,8 @@ public class ShipScript : MonoBehaviour
     private float halfPlayerSizeY;
     private Vector3 respawnPosition;
     public GameObject instantiatedshipPrefab;
+    public static int goalScore = 100;
+    public static int currentScore = 0;
     [SerializeField] private GameObject shipPrefab;
 
     public GameObject explosionEffect; // Optional: Explosion effect prefab
@@ -24,9 +26,8 @@ public class ShipScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         lives = 3;
-        score = 0;
-        ScoreScript.scoreValue = 0;
         LifeScript.lifeValue = 3;
+        ScoreScript.scoreValue = currentScore;
 
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
@@ -79,9 +80,20 @@ public class ShipScript : MonoBehaviour
     // Collision and life decrement logic
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (ScoreScript.scoreValue >= goalScore)
+        {
+            currentScore = goalScore;
+            ScoreScript.scoreValue = currentScore;
+            NextLevel();
+            goalScore = goalScore * 2;
+        }
         if (collision.CompareTag("Star"))
         {
             ScoreScript.scoreValue += 20;
+            if(ScoreScript.scoreValue >= goalScore)
+            {
+
+            }
             Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("Asteriod"))
@@ -142,6 +154,11 @@ public class ShipScript : MonoBehaviour
         SceneManager.LoadScene("Finish Scene");
         
 
+    }
+
+    private void NextLevel()
+    {
+        SceneManager.LoadScene("Level Scene");
     }
 
     private IEnumerator DelayedSceneLoad()
