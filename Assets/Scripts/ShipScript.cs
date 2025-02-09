@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ public class ShipScript : MonoBehaviour
     private float halfPlayerSizeY;
     private Vector3 respawnPosition;
     public GameObject instantiatedshipPrefab;
+    public static int goalScore = 100;
     [SerializeField] private GameObject shipPrefab;
 
     public GameObject explosionEffect; // Optional: Explosion effect prefab
@@ -79,6 +81,11 @@ public class ShipScript : MonoBehaviour
     // Collision and life decrement logic
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (ScoreScript.scoreValue >= goalScore)
+        {
+            goalScore += 100;
+            NextLevel();
+        }
         if (collision.CompareTag("Star"))
         {
             ScoreScript.scoreValue += 20;
@@ -142,6 +149,11 @@ public class ShipScript : MonoBehaviour
         SceneManager.LoadScene("Finish Scene");
         
 
+    }
+
+    private void NextLevel()
+    {
+        SceneManager.LoadScene("Level Scene");
     }
 
     private IEnumerator DelayedSceneLoad()

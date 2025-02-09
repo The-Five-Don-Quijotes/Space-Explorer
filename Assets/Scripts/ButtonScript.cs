@@ -6,7 +6,7 @@ public class ButtonScript : MonoBehaviour
     public void StartGame()
     {
         Debug.Log("Start game");
-        SceneManager.LoadScene("Ingame Scence");
+        SceneManager.LoadScene("Level Scene");
     }
 
     public void ShowInstruction()
