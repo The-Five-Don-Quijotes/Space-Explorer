@@ -117,7 +117,7 @@ public class ShipScript : MonoBehaviour
 
     private void LoseLife()
     {
-        lives--; // Decrement lives for ShipScript logic
+        lives--; 
         LifeScript.DecreaseLife(); // Update the Life UI display
         Debug.Log("Lives remaining: " + lives);
 
