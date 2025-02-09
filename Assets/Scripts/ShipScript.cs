@@ -27,6 +27,7 @@ public class ShipScript : MonoBehaviour
         score = 0;
         ScoreScript.scoreValue = 0;
         LifeScript.lifeValue = 3;
+
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
     }
