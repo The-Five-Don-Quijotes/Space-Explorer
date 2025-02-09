@@ -13,7 +13,7 @@ public class LevelScript : MonoBehaviour
         levelValue++;
         level.text = "Level " + levelValue;
 
-        Invoke("LoadNextScene", 1f);
+        Invoke("LoadNextScene", 0.5f);
     }
 
     void LoadNextScene()
