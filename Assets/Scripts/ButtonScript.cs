@@ -24,4 +24,10 @@ public class ButtonScript : MonoBehaviour
     {
         SceneManager.LoadScene("TotalSCore Scene");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
 }
