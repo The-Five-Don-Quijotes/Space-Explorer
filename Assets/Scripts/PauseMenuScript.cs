@@ -3,12 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuScript : MonoBehaviour
 {
-    public GameObject pauseMenuUI;  // Assign your UI Panel in Unity
+    public GameObject pauseMenuUI;
     private bool isPaused = false;
 
     void Update()
     {
-        // Detect Esc key or pause button press
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
