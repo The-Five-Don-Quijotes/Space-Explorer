@@ -12,7 +12,5 @@ public class TotalScoreDisplayScript : MonoBehaviour
         finalScoreText.text = "Total Score:" + ScoreScript.scoreValue;
         string playerName = PlayerPrefs.GetString("PlayerName", "Player");
         playerNameText.text = "Player: " + playerName;
-
-
     }
 }

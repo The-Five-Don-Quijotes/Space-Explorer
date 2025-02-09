@@ -1,19 +1,21 @@
 ﻿using Assets.Scripts;
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GetTopTenPlayers : MonoBehaviour
 {
     private DatabaseManagement db;
-    public Text leaderboardText; // Gán UI Text vào đây
+    public TextMeshProUGUI leaderboardText; // Gán UI Text vào đây
 
     void Start()
     {
         db = FindFirstObjectByType<DatabaseManagement>();
         if (db == null)
         {
-            Debug.LogError("DatabaseManagement không được tìm thấy trong scene!");
+            Debug.LogError("DatabaseManagement not found in scene!");
             return;
         }
 
@@ -34,5 +36,7 @@ public class GetTopTenPlayers : MonoBehaviour
         {
             leaderboardText.text = leaderboardString;
         }
+
+        Debug.Log($"Generated Leaderboard String:\n{leaderboardString}"); // Log for inspection
     }
 }
