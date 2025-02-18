@@ -1624,10 +1624,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 998471073}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c31f5b02506b3d34ab02611e0bf13dea, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ff8c030ec615fb468ed9d7b61b438ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  asteroidPrefab: {fileID: 4182156145226553598, guid: b27bb232a83cd414cba4a17c969467c1, type: 3}
+  starPrefab: {fileID: 4182156145226553598, guid: b27bb232a83cd414cba4a17c969467c1, type: 3}
   spawnInterval: 2
 --- !u!1 &1049760397
 GameObject:

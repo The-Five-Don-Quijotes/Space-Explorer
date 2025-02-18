@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
 {
-    public GameObject asteroidPrefab; // Assign your asteroid prefab in the Inspector
-    public float spawnInterval = 2f;  // Time between spawns
+    public GameObject asteroidPrefab; 
+    public float spawnInterval = 2f;  
 
     void Start()
     {

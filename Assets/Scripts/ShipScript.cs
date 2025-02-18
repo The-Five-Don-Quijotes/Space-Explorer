@@ -17,6 +17,7 @@ public class ShipScript : MonoBehaviour
     public GameObject instantiatedshipPrefab;
     public static int goalScore = 100;
     public static int currentScore = 0;
+    public AsteroidSpawner asteroidSpawner;
     [SerializeField] private GameObject shipPrefab;
 
     public GameObject explosionEffect; // Optional: Explosion effect prefab
@@ -31,6 +32,10 @@ public class ShipScript : MonoBehaviour
 
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
+        if (asteroidSpawner == null)
+        {
+            asteroidSpawner = FindFirstObjectByType<AsteroidSpawner>();
+        }
     }
 
     // Update is called once per frame
@@ -86,6 +91,8 @@ public class ShipScript : MonoBehaviour
             ScoreScript.scoreValue = currentScore;
             NextLevel();
             goalScore = goalScore * 2;
+            asteroidSpawner.spawnInterval -= 0.1f;
+            Debug.Log(asteroidSpawner.spawnInterval);
         }
         if (collision.CompareTag("Star"))
         {
