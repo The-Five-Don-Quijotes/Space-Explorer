@@ -5,9 +5,15 @@ public class AsteroidScript : MonoBehaviour
     Rigidbody2D rb;
     private int speed = 6;
     public float bottomScreen = -6f;
+    public float spawnChance = 0.05f;
+    public StarSpawner starSpawner;
 
     void Start()
     {
+        if(starSpawner == null)
+        {
+            starSpawner = FindFirstObjectByType<StarSpawner>();
+        }
         rb = GetComponent<Rigidbody2D>();
         // Set a random position along the top of the screen
         Vector2 randomPosition = new Vector2(Random.Range(-8f, 8f), 6f); // Adjust range based on your screen width
@@ -34,6 +40,12 @@ public class AsteroidScript : MonoBehaviour
             Destroy(collision.gameObject);
 
             Destroy(gameObject);
+
+            if (Random.value < spawnChance)
+            {
+                starSpawner.SpawnStar();
+            }
+
         }
     }
 }
