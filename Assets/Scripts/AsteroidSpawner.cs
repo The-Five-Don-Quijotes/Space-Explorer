@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
 {
-    public GameObject asteroidPrefab; 
+    public GameObject asteroidPrefab;
+    public Sprite[] asteroidSprites;
     public float spawnInterval = 2f;  
 
     void Start()
@@ -12,6 +13,12 @@ public class AsteroidSpawner : MonoBehaviour
 
     void SpawnAsteroid()
     {
-        Instantiate(asteroidPrefab);
+        GameObject asteroid = Instantiate(asteroidPrefab);
+
+        if (asteroidSprites.Length > 0)
+        {
+            Sprite randomSprite = asteroidSprites[Random.Range(0, asteroidSprites.Length)];
+            asteroid.GetComponent<SpriteRenderer>().sprite = randomSprite;
+        }
     }
 }
