@@ -10,7 +10,7 @@ public class StarSpawner : MonoBehaviour
         InvokeRepeating("SpawnStar", 0f, spawnInterval);
     }
 
-    void SpawnStar()
+    public void SpawnStar()
     {
         Instantiate(starPrefab);
     }
