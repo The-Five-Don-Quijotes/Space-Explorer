@@ -3,11 +3,13 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Unity.VisualScripting.Member;
 
 public class ShipScript : MonoBehaviour
 {
     private Rigidbody2D rb;
     public GameObject laser;
+    //private AudioSource laserSound;
     public int lives = 3; // Initialize lives to 3
     public float fireDelay = 0.25f;
     float cooldownTimer = 0;
@@ -36,6 +38,8 @@ public class ShipScript : MonoBehaviour
         {
             asteroidSpawner = FindFirstObjectByType<AsteroidSpawner>();
         }
+
+        //laserSound = laser.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -60,6 +64,8 @@ public class ShipScript : MonoBehaviour
             // Creates a new instance (clone) of the laser
             cooldownTimer = fireDelay;
             Instantiate(laser, transform.position, Quaternion.identity);
+
+            //laserSound.Play();
         }
     }
 
