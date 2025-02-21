@@ -15,6 +15,10 @@ public class AsteroidScript : MonoBehaviour
         {
             starSpawner = FindFirstObjectByType<StarSpawner>();
         }
+        if(destroySound == null)
+        {
+            destroySound = FindFirstObjectByType<AudioSource>();
+        }
         rb = GetComponent<Rigidbody2D>();
         // Set a random position along the top of the screen
         Vector2 randomPosition = new Vector2(Random.Range(-8f, 8f), 6f); // Adjust range based on your screen width
