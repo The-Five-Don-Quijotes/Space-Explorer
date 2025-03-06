@@ -21,6 +21,10 @@ public class ShipScript : MonoBehaviour
     public static int currentScore = 0;
     public AsteroidSpawner asteroidSpawner;
     [SerializeField] private GameObject shipPrefab;
+    public AudioSource collectStarSound;
+    public AudioSource nextLevel;
+    public AudioSource crash;
+
 
     public GameObject explosionEffect; // Optional: Explosion effect prefab
 
@@ -31,6 +35,9 @@ public class ShipScript : MonoBehaviour
         lives = 3;
         LifeScript.lifeValue = 3;
         ScoreScript.scoreValue = currentScore;
+        collectStarSound = GameObject.Find("CollectStarSound").GetComponent<AudioSource>();
+        nextLevel = GameObject.Find("NextLevel").GetComponent<AudioSource>();
+        crash = GameObject.Find("Crash").GetComponent<AudioSource>();
 
         halfPlayerSizeX = GetComponent<SpriteRenderer>().bounds.size.x / 2;
         halfPlayerSizeY = GetComponent<SpriteRenderer>().bounds.size.y / 2;
@@ -108,6 +115,7 @@ public class ShipScript : MonoBehaviour
 
             }
             Destroy(collision.gameObject);
+            collectStarSound.Play();
         }
         else if (collision.CompareTag("Asteriod"))
         {
@@ -125,6 +133,7 @@ public class ShipScript : MonoBehaviour
 
             // Optional: Destroy asteroid
             Destroy(collision.gameObject);
+            crash.Play();
         }
     }
 
@@ -171,6 +180,7 @@ public class ShipScript : MonoBehaviour
 
     private void NextLevel()
     {
+        nextLevel.Play();
         SceneManager.LoadScene("Level Scene");
     }
 
